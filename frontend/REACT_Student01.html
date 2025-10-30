@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html xmlns:mso="urn:schemas-microsoft-com:office:office" xmlns:msdt="uuid:C2F41010-65B3-11d1-A29F-00AA00C14882">
+	<head>
+	  	<script src="https://unpkg.com/react@17/umd/react.development.js" ></script>
+		<script src="https://unpkg.com/react-dom@17/umd/react-dom.development.js" ></script>
+		<script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+		<script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+	
+<!--[if gte mso 9]><xml>
+<mso:CustomDocumentProperties>
+<mso:xd_Signature msdt:dt="string"></mso:xd_Signature>
+<mso:display_urn_x003a_schemas-microsoft-com_x003a_office_x003a_office_x0023_Editor msdt:dt="string">Vieira Ferreira, Júlio</mso:display_urn_x003a_schemas-microsoft-com_x003a_office_x003a_office_x0023_Editor>
+<mso:Order msdt:dt="string">45400.0000000000</mso:Order>
+<mso:xd_ProgID msdt:dt="string"></mso:xd_ProgID>
+<mso:_ExtendedDescription msdt:dt="string"></mso:_ExtendedDescription>
+<mso:display_urn_x003a_schemas-microsoft-com_x003a_office_x003a_office_x0023_Author msdt:dt="string">Vieira Ferreira, Júlio</mso:display_urn_x003a_schemas-microsoft-com_x003a_office_x003a_office_x0023_Author>
+<mso:ComplianceAssetId msdt:dt="string"></mso:ComplianceAssetId>
+<mso:TemplateUrl msdt:dt="string"></mso:TemplateUrl>
+<mso:TriggerFlowInfo msdt:dt="string"></mso:TriggerFlowInfo>
+<mso:ContentTypeId msdt:dt="string">0x0101006E714E5149BF254FBE6026CCDBF081FD</mso:ContentTypeId>
+<mso:_SourceUrl msdt:dt="string"></mso:_SourceUrl>
+<mso:_SharedFileIndex msdt:dt="string"></mso:_SharedFileIndex>
+<mso:TaxCatchAll msdt:dt="string"></mso:TaxCatchAll>
+<mso:MediaServiceImageTags msdt:dt="string"></mso:MediaServiceImageTags>
+<mso:lcf76f155ced4ddcb4097134ff3c332f msdt:dt="string"></mso:lcf76f155ced4ddcb4097134ff3c332f>
+</mso:CustomDocumentProperties>
+</xml><![endif]-->
+<title></title></head>
+	<body ng-app="myApp">
+		<h1>REACT Front-End: </h1>
+        <div id="saida"></div>
+
+		<script type="text/babel">
+			class GetRequest extends React.Component {
+				constructor(props) {
+					super(props);
+
+					this.state = { 
+						colecaoStudent: []
+					};
+					this.getBackEnd = this.getBackEnd.bind(this);
+				}
+
+				componentDidMount() {
+
+				}
+				
+				getBackEnd() {
+					axios.get('http://localhost:8080/student')
+						 .then(response => {this.state.colecaoStudent = response.data 
+						                    this.setState(this.state.colecaoStudent)})
+						 .catch(error => {console.log(error) });
+				}
+				render() {
+					const { resposta } = this.state;
+					return (
+						<div >
+							<h1> Simple GET Request</h1>
+							<button type="button" onClick={this.getBackEnd}> Pegar Dados </button>
+							<br />				
+							<br />
+						    <div>
+							  {this.state.colecaoStudent.length > 0 && (
+								<ul>
+								  { this.state.colecaoStudent.map( student => <li key = { student.id }> { student.name } </li>) }
+								</ul>
+							   )}
+						    </div>
+						</div>
+					);
+				}
+			}
+
+			ReactDOM.render(<GetRequest />,document.getElementById('saida'));
+		</script>
+	</body>
+</html>

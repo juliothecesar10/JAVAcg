@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html xmlns:mso="urn:schemas-microsoft-com:office:office" xmlns:msdt="uuid:C2F41010-65B3-11d1-A29F-00AA00C14882">
+	<head>
+	  	<script src="https://unpkg.com/react@17/umd/react.development.js" ></script>
+		<script src="https://unpkg.com/react-dom@17/umd/react-dom.development.js" ></script>
+		<script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+		<script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+<title></title></head>
+	<body ng-app="myApp">
+		<h1>REACT Front-End: </h1>
+        <div id="saida"></div>
+
+		<script type="text/babel">
+			class GetRequest extends React.Component {
+				constructor(props) {
+					super(props);
+
+					// Estado do componente, agora inclui os campos do formulário
+					this.state = { 
+						resposta: null, // resposta do backend
+						id: '',         // campo para o ID do estudante
+						age: '',        // campo para a idade
+						name: '',       // campo para o nome
+						email: ''       // campo para o email
+					};
+					// Bind das funções para manter o contexto 'this'
+					this.getBackEnd = this.getBackEnd.bind(this);
+					this.handleChange = this.handleChange.bind(this);
+				}
+
+				// Função chamada automaticamente após o componente ser montado
+				componentDidMount() {
+					// Pode ser usada para buscar dados iniciais, se necessário
+				}
+				
+				// Função responsável por enviar os dados do formulário para o backend
+				getBackEnd() {
+					var url = "http://localhost:8080/student";
+					// Monta o corpo da requisição com os dados preenchidos pelo usuário
+					var body = {
+						id: this.state.id,
+						age: this.state.age,
+						name: this.state.name,
+						email: this.state.email
+					};
+					// Envia os dados via POST usando axios
+					axios.post(url, body)
+						.then(response => { this.info = response.data }) // armazena resposta
+						.then(info => this.setState({ resposta: "Inserido com sucesso!" })) // atualiza mensagem
+						.catch(error => { console.log(error) }) // trata erros
+				}
+
+				// Função para atualizar o estado conforme o usuário digita nos inputs
+				handleChange(e) {
+					// Atualiza o campo correspondente usando o atributo 'name' do input
+					this.setState({ [e.target.name]: e.target.value });
+				}
+				render() {
+					// Extrai os campos do estado para usar nos inputs
+					const { resposta, id, age, name, email } = this.state;
+					return (
+						<div>
+							<h1> Simple POST Request</h1>
+							{/* Campo para o ID do estudante */}
+							<label>
+								ID:
+								<input type="text" name="id" value={id} onChange={this.handleChange} />
+							</label>
+							<br />
+							{/* Campo para a idade */}
+							<label>
+								Age:
+								<input type="text" name="age" value={age} onChange={this.handleChange} />
+							</label>
+							<br />
+							{/* Campo para o nome */}
+							<label>
+								Name:
+								<input type="text" name="name" value={name} onChange={this.handleChange} />
+							</label>
+							<br />
+							{/* Campo para o email */}
+							<label>
+								Email:
+								<input type="text" name="email" value={email} onChange={this.handleChange} />
+							</label>
+							<br />
+							{/* Botão para enviar os dados ao backend */}
+							<button type="button" onClick={this.getBackEnd}> Inserir Dados </button>
+							<br />
+							<br />
+							{/* Exibe a resposta do backend */}
+							<div>
+								Retornado: {resposta}
+							</div>
+						</div>
+					);
+				}
+			}
+
+			ReactDOM.render(<GetRequest />,document.getElementById('saida'));
+		</script>
+	</body>
+</html>
